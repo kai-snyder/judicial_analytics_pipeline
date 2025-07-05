@@ -112,11 +112,11 @@ produced by this pipeline, please reference CourtListener and retain the CC0 not
 
 ---
 
-## Road Map
+## Roadmap
 
 | Status |                       Goal                  |                                       Notes                              |
 |--------|---------------------------------------------|--------------------------------------------------------------------------|
-| ✅     | **Stable ETL** (fetch → transform → ingest) | Handles full range for all 94 districts.                                 |
+| ✅     | **Stable ETL** (fetch → transform → ingest) | Handles full date range for all 94 districts.                            |
 | ⏳     | **Judge analytics**                         | Scrape judge IDs → enrich cases → activate `judge_win_rates` view.       |
 | ⏳     | **Weekly GitHub Action**                    | Cloud run that pulls the past 7 days of dockets & outcomes every Monday. |
 
