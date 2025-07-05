@@ -30,7 +30,7 @@ PostgreSQL, and (optionally) serves a Streamlit dashboard.
 
 ---
 
-## Quick Start (local)
+## Quick Start
 
 ```
 # 0. Clone & install deps
@@ -64,8 +64,6 @@ Copy `.env.example` → `.env` and fill in as needed.
 | `CL_API_KEY`   | _empty_                                                               | (Optional) CourtListener API key – higher rate limits |
 | `DATABASE_URL` | `postgresql+psycopg2://postgres:postgres@localhost:5432/case_details` | SQLAlchemy URL used by the pipeline                   |
 
----
-
 ## Docker
 
 > Great for demos / CI runs
@@ -74,6 +72,8 @@ Copy `.env.example` → `.env` and fill in as needed.
 make up          # builds image, launches Postgres, runs full ETL
 make down        # stop + remove containers/volumes
 ```
+
+---
 
 ## Development Tips
 
@@ -116,7 +116,7 @@ produced by this pipeline, please reference CourtListener and retain the CC0 not
 
 | Status |                       Goal                  |                                       Notes                              |
 |--------|---------------------------------------------|--------------------------------------------------------------------------|
-| ✅     | **Stable ETL** (fetch → transform → ingest) | Handles full 2015–2026 range for all 94 districts.                       |
+| ✅     | **Stable ETL** (fetch → transform → ingest) | Handles full range for all 94 districts.                                 |
 | ⏳     | **Judge analytics**                         | Scrape judge IDs → enrich cases → activate `judge_win_rates` view.       |
 | ⏳     | **Weekly GitHub Action**                    | Cloud run that pulls the past 7 days of dockets & outcomes every Monday. |
 
