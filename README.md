@@ -13,7 +13,7 @@ PostgreSQL, and (optionally) serves a Streamlit dashboard.
 
 ---
 
-## Folder layout
+## Folder Layout
 
 ```
 ├─ config/ # logging + settings templates
@@ -30,7 +30,7 @@ PostgreSQL, and (optionally) serves a Streamlit dashboard.
 
 ---
 
-## Quick start (local)
+## Quick Start (local)
 
 ```
 # 0. Clone & install deps
@@ -55,7 +55,7 @@ python -m src.cli ingest
 streamlit run dashboard/app.py            # optional
 ```
 
-## Environment variables
+## Environment Variables
 
 Copy `.env.example` → `.env` and fill in as needed.
 
@@ -66,7 +66,7 @@ Copy `.env.example` → `.env` and fill in as needed.
 
 ---
 
-## Docker (one-liner)
+## Docker
 
 > Great for demos / CI runs
 
@@ -75,7 +75,7 @@ make up          # builds image, launches Postgres, runs full ETL
 make down        # stop + remove containers/volumes
 ```
 
-## Development tips
+## Development Tips
 
 - **Work on one court at a time**  
   Edit `fetch_fd_slugs.sh` (or call `python -m src.data.fetch_courtlistener`) with a single `--court dcd` flag while prototyping.
@@ -97,3 +97,27 @@ make down        # stop + remove containers/volumes
   make db           # spin up Postgres only
   python -m src.cli transform
   python -m src.cli ingest
+  ```
+
+---
+
+## Dataset/API License
+
+All docket and outcome data are fetched from **CourtListener**  
+(CC0 1.0 Universal Public Domain Dedication).  
+See <https://www.courtlistener.com/api/bulk-info/> for details.
+
+*When you redistribute any portion of the raw JSONL or processed parquet
+produced by this pipeline, please reference CourtListener and retain the CC0 notice.*
+
+---
+
+## Road Map
+
+| Status |                       Goal                  |                                       Notes                              |
+|--------|---------------------------------------------|--------------------------------------------------------------------------|
+| ✅     | **Stable ETL** (fetch → transform → ingest) | Handles full 2015–2026 range for all 94 districts.                       |
+| ⏳     | **Judge analytics**                         | Scrape judge IDs → enrich cases → activate `judge_win_rates` view.       |
+| ⏳     | **Weekly GitHub Action**                    | Cloud run that pulls the past 7 days of dockets & outcomes every Monday. |
+
+Legend: ✅ done  ⏳ planned
