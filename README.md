@@ -30,7 +30,7 @@ PostgreSQL, and (optionally) serves a Streamlit dashboard.
 
 ---
 
-## Quick-start (local)
+## Quick start (local)
 
 ```
 # 0. Clone & install deps
@@ -75,7 +75,7 @@ make up          # builds image, launches Postgres, runs full ETL
 make down        # stop + remove containers/volumes
 ```
 
-## Development Tips
+## Development tips
 
 - **Work on one court at a time**  
   Edit `fetch_fd_slugs.sh` (or call `python -m src.data.fetch_courtlistener`) with a single `--court dcd` flag while prototyping.
