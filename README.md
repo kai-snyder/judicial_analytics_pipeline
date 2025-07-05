@@ -1,20 +1,21 @@
-# Judicial Analytics Pipeline ⚖️
+# Judicial Analytics Pipeline
 
 A reproducible, Python-first data pipeline that fetches CourtListener
 district-court dockets, transforms them into tidy parquet files, loads them into
 PostgreSQL, and (optionally) serves a Streamlit dashboard.
 
-| Stage | Script / Tool | What it does |
-|-------|---------------|--------------|
-| **1. Fetch** | `fetch_fd_slugs.sh`, `fetch_year_all_courts.sh` | Pull raw JSONL dockets + outcomes from CourtListener REST API |
-| **2. Transform** | `python -m src.data.transform` | Normalize JSONL → parquet (`data/processed/…`) |
-| **3. Ingest** | `python -m src.cli ingest` | Create schema, load parquet into Postgres |
-| **4. Explore** | `streamlit run dashboard/app.py` | Interactive dashboard (optional) |
+|       Stage      |                  Script / Tool                  |                          What it does                         |
+|------------------|-------------------------------------------------|---------------------------------------------------------------|
+| **1. Fetch**     | `fetch_fd_slugs.sh`, `fetch_year_all_courts.sh` | Pull raw JSONL dockets + outcomes from CourtListener REST API |
+| **2. Transform** | `python -m src.data.transform`                  | Normalize JSONL → parquet (`data/processed/…`)                |
+| **3. Ingest**    | `python -m src.cli ingest`                      | Create schema, load parquet into Postgres                     |
+| **4. Explore**   | `streamlit run dashboard/app.py`                | Interactive dashboard (optional)                              |
 
 ---
 
 ## Folder layout
 
+```
 ├─ config/ # logging + settings templates
 ├─ data/ # <- ignored in Git
 │ ├─ raw/ # raw JSONL from CourtListener
@@ -25,7 +26,7 @@ PostgreSQL, and (optionally) serves a Streamlit dashboard.
 │ ├─ data/ # fetch / transform / ingest helpers
 │ └─ utils/ # small shared helpers
 └─ dashboard/ # Streamlit app (optional)
-
+```
 
 ---
 
@@ -58,11 +59,10 @@ streamlit run dashboard/app.py            # optional
 
 Copy `.env.example` → `.env` and fill in as needed.
 
-| Var | Default | Purpose |
-|-----|---------|---------|
-| `CL_API_KEY` | _empty_ | (Optional) CourtListener API key – higher rate limits |
-| `DATABASE_URL` | `postgresql+psycopg2://postgres:postgres@localhost:5432/case_details` | SQLAlchemy URL used by the pipeline |
-| `LOG_LEVEL` | `INFO` | Global logging level |
+|      Var       |                             Default                                   | Purpose                                               |
+|----------------|-----------------------------------------------------------------------|-------------------------------------------------------|
+| `CL_API_KEY`   | _empty_                                                               | (Optional) CourtListener API key – higher rate limits |
+| `DATABASE_URL` | `postgresql+psycopg2://postgres:postgres@localhost:5432/case_details` | SQLAlchemy URL used by the pipeline                   |
 ```
 
 ---
