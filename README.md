@@ -74,7 +74,7 @@ Copy `.env.example` → `.env` and fill in as needed.
 ```
 make up          # builds image, launches Postgres, runs full ETL
 make down        # stop + remove containers/volumes
-
+```
 
 ## Development Tips
 
