@@ -53,7 +53,7 @@ python -m src.cli ingest
 
 # 5. Explore
 streamlit run dashboard/app.py            # optional
-
+```
 
 ## Environment variables
 
