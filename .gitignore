@@ -1,0 +1,88 @@
+###############################################################################
+#  Core Python                                                                #
+###############################################################################
+
+# Byte-code / metadata
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+*.pyd
+*.pyo
+*.pyd
+.Python
+
+# Virtual-envs
+venv/
+.env/
+.venv/
+.conda/
+pip-wheel-metadata/
+
+# Build / distribution
+build/
+dist/
+wheelhouse/
+site/
+.eggs/
+*.egg
+*.whl
+
+###############################################################################
+#  Project-specific artefacts                                                 #
+###############################################################################
+
+# Local secrets
+.env
+.env.*                    # any env variants the user may create
+
+# Data outputs
+data/raw/
+data/interim/
+data/processed/
+data/features/
+reports/
+models/artifacts/
+
+# Notebooks checkpoints / output
+**/.ipynb_checkpoints/
+*.nbconvert.ipynb
+
+# Logs & debugging
+*.log
+logs/
+coverage/
+profiler/
+
+###############################################################################
+#  Editor / OS cruft                                                          #
+###############################################################################
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Icon?
+Desktop.ini
+
+# VS Code / IntelliJ / PyCharm / etc.
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Backup / temp files
+*~
+*.swp
+*.bak
+*.tmp
+
+# Streamlit dashboard (UI code not needed for this repo)
+dashboard/
+
+# Local Postgres volume created by Docker
+pgdata/
