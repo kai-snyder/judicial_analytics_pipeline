@@ -1,4 +1,4 @@
-PYTHON=python -m court_outcome_pred   # module-as-script pattern
+PYTHON=python -m   # module-as-script pattern
 VENV?=venv
 
 all: setup data ingest features train evaluate
@@ -10,19 +10,13 @@ setup:
 	pre-commit install
 
 data:
-	$(VENV)/bin/$(PYTHON) data.fetch_courtlistener --start 2024-01-01 --end 2024-01-07 --court dcd
+	$(VENV)/bin/$(PYTHON) src.data.fetch_courtlistener --start 2024-01-01 --end 2024-01-07 --court dcd
+
+transform:
+	$(VENV)/bin/$(PYTHON) src.data.transform
 
 ingest:
-	$(VENV)/bin/$(PYTHON) data.ingest_sql
-
-features:
-	$(VENV)/bin/$(PYTHON) features.build_features
-
-train:
-	$(VENV)/bin/$(PYTHON) models.train
-
-evaluate:
-	$(VENV)/bin/$(PYTHON) models.evaluate
+	$(VENV)/bin/$(PYTHON) src.data.ingest_sql
 
 lint:
 	$(VENV)/bin/ruff .

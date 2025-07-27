@@ -81,8 +81,5 @@ Desktop.ini
 *.bak
 *.tmp
 
-# Streamlit dashboard (UI code not needed for this repo)
-dashboard/
-
 # Local Postgres volume created by Docker
 pgdata/

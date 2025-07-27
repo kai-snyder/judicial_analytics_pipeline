@@ -1,6 +1,6 @@
 """
 Load transformed parquet into Postgres tables as defined in sql/schema.sql
-Run after `python -m court_outcome_pred.data.transform`.
+Run after `python -m src.data.transform`.
 """
 from __future__ import annotations
 
@@ -21,51 +21,57 @@ def ensure_schema() -> None:
     schema_sql = Path("sql/schema.sql").read_text()
     with engine.begin() as conn:
         conn.execute(text(schema_sql))
+        # new – idempotent index to guard against duplicate loads
     logger.info("Schema checked/applied.")
 
 
 def load_cases_parquet(engine) -> None:
+    """
+    Read every dockets_*.parquet and append only *new* rows to the cases table.
+    """
+    wanted_cols = [
+        "case_id", "url", "court_slug", "docket_number",
+        "filing_date", "closing_date",
+        "nature_of_suit", "nature_of_suit_numeric",
+        # columns like win_bool / disposition stay nullable – fine to omit
+    ]
+
     for pq in PROC_DIR.glob("dockets_*.parquet"):
         df = pd.read_parquet(pq)
-        # ── skip files that have no rows or that somehow lost the case_id column ──
         if df.empty or "case_id" not in df.columns:
-            logger.info("%s – empty parquet, skipping", pq.name)
+            logger.info("%s – empty or malformed parquet, skipping", pq.name)
             continue
+
+        df = (
+            df.rename(columns={"nos_code": "nature_of_suit_numeric"})
+              .reindex(columns=wanted_cols)
+        )
+
         df = df.drop_duplicates(subset="case_id", keep="first")
-        existing_ids = pd.read_sql('SELECT case_id FROM cases', engine)['case_id']
-        df = df.loc[~df['case_id'].isin(existing_ids)].copy()
-        df.to_sql("cases", engine, if_exists="append", index=False, method="multi", chunksize=1000)
-        logger.info("Inserted %s rows from %s", len(df), pq.name)
+        existing = pd.read_sql("SELECT case_id FROM cases", engine)["case_id"]
+        df = df[~df["case_id"].isin(existing)].copy()
 
-
-def load_outcomes_parquet(engine) -> None:
-    for pq in PROC_DIR.glob("outcomes_*.parquet"):
-        df = pd.read_parquet(pq)
-        df.to_sql("outcomes", engine,
-                  if_exists="append",
-                  index=False,
-                  method="multi",
-                  chunksize=1000)
+        if not df.empty:
+            df.to_sql(
+                "cases",
+                engine,
+                if_exists="append",
+                index=False,
+                method="multi",
+                chunksize=1000,
+            )
         logger.info("Inserted %s rows from %s", len(df), pq.name)
-        # copy win_bool into cases – one SQL is faster than pandas
-        with engine.begin() as con:
-            con.execute(text("""
-                INSERT INTO cases (case_id)                      -- no orphan FK
-                SELECT case_id FROM outcomes
-                ON CONFLICT DO NOTHING;
-                UPDATE cases   c
-                SET    outcome_win = o.win_bool
-                FROM   outcomes o
-                WHERE  o.case_id = c.case_id
-                  AND  c.outcome_win IS DISTINCT FROM o.win_bool;
-            """))
 
 
 def main() -> None:
     ensure_schema()
     engine = get_engine()
     load_cases_parquet(engine)
-    load_outcomes_parquet(engine)
+    with engine.begin() as conn:
+        conn.execute(
+            text("REFRESH MATERIALIZED VIEW CONCURRENTLY judge_win_rates")
+        )
+    logger.info("Materialized view judge_win_rates refreshed.")
 
 
 

@@ -15,16 +15,19 @@ SET search_path = public;
 
 -- ─── core docket information ──────────────────────────────────
 CREATE TABLE IF NOT EXISTS cases (
-    case_id        BIGINT PRIMARY KEY,               -- stable CL docket ID
-    url            TEXT            NOT NULL,         -- v4 API URL for the docket
-    court_slug     TEXT            NOT NULL,         -- e.g. 'dcd'
-    docket_number  TEXT,                             -- court-assigned number
-    filing_date    DATE,                             -- date_filed
-    closing_date   DATE,                             -- date_closed (if any)
-    nature_of_suit TEXT,                             -- NOS code
-    cause          TEXT,                             -- 'cause_of_action'
-    case_name      TEXT,                             -- short caption
-    judge_id       BIGINT                            -- add later if/when you fetch judge data
+    case_id                BIGINT          PRIMARY KEY,               -- stable CL docket ID
+    url                    TEXT            NOT NULL,         -- v4 API URL for the docket
+    court_slug             TEXT            NOT NULL,         -- e.g. 'dcd'
+    docket_number          TEXT,                             -- court-assigned number
+    filing_date            DATE,                             -- date_filed
+    closing_date           DATE,                             -- date_closed (if any)
+    nature_of_suit         TEXT,                             -- NOS code
+    nature_of_suit_numeric INTEGER, 
+    cause                  TEXT,                             -- 'cause_of_action'
+    case_name              TEXT,                             -- short caption
+    judge_id               BIGINT,
+    win_bool               BOOLEAN, 
+    disposition            TEXT
 );
 
 CREATE INDEX IF NOT EXISTS idx_cases_court_date
@@ -65,15 +68,11 @@ CREATE TABLE IF NOT EXISTS outcomes (
 
 -- populate / refresh the label column from `outcomes`
 
--- copy win_bool into the cases table (add the column on first run)
-ALTER TABLE cases
-    ADD COLUMN IF NOT EXISTS outcome_win BOOLEAN;
-
 UPDATE cases AS c
-SET    outcome_win = o.win_bool
+SET    win_bool = o.win_bool
 FROM   outcomes o
 WHERE  o.case_id = c.case_id
-  AND  c.outcome_win IS DISTINCT FROM o.win_bool;
+  AND  c.win_bool IS DISTINCT FROM o.win_bool;
 
 -- ──────────────────────────────────────────────────────────────
 --  Materialised view : judge_win_rates

@@ -1,15 +1,15 @@
 # Judicial Analytics Pipeline
 
-A reproducible, Python-first data pipeline that fetches CourtListener
-district-court dockets, transforms them into tidy parquet files, loads them into
-PostgreSQL, and (optionally) serves a Streamlit dashboard.
+A reproducible data pipeline that fetches CourtListener
+district court dockets, transforms them into tidy parquet files, loads them into
+PostgreSQL, and serves a Streamlit dashboard.
 
 |       Stage      |                  Script / Tool                  |                          What it does                         |
 |------------------|-------------------------------------------------|---------------------------------------------------------------|
 | **1. Fetch**     | `fetch_fd_slugs.sh`, `fetch_year_all_courts.sh` | Pull raw JSONL dockets + outcomes from CourtListener REST API |
 | **2. Transform** | `python -m src.data.transform`                  | Normalize JSONL → parquet (`data/processed/…`)                |
 | **3. Ingest**    | `python -m src.cli ingest`                      | Create schema, load parquet into Postgres                     |
-| **4. Explore**   | `streamlit run dashboard/app.py`                | Interactive dashboard (optional)                              |
+| **4. Explore**   | `streamlit run dashboard/app.py`                | Interactive dashboard                                         |
 
 ---
 
@@ -20,15 +20,18 @@ PostgreSQL, and (optionally) serves a Streamlit dashboard.
 ├─ data/ # <- ignored in Git
 │ ├─ raw/ # raw JSONL from CourtListener
 │ └─ processed/ # tidy parquet
-├─ docker/ # Dockerfile + docker-compose.yml
 ├─ sql/ # schema.sql (DDL)
 ├─ src/ # Python package
 │ ├─ data/ # fetch / transform / ingest helpers
 │ └─ utils/ # small shared helpers
-└─ dashboard/ # Streamlit app (optional)
+└─ dashboard/ # Streamlit app
 ```
 
 ---
+
+## Quick peek
+
+![Interactive dashboard showcase](dashboard_showcase.gif)
 
 ## Quick Start
 
@@ -37,41 +40,37 @@ PostgreSQL, and (optionally) serves a Streamlit dashboard.
 git clone https://github.com/kai-snyder/judicial_analytics_pipeline.git
 cd judicial_analytics_pipeline
 python -m venv venv && source venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements.txt 
+cp .env.example .env           # add your CL_API_TOKEN 
 
 # 1. Fetch a year of dockets + outcomes
-./fetch_year_all_courts.sh 2015
+src/data/fetch_year_all_courts.sh     # in the file, change START and END as needed
 
 # 2. Transform JSONL → parquet
 python -m src.data.transform
 
-# 3. Spin up Postgres in Docker
-docker compose -f docker/docker-compose.yml up -d db
+# 3. Spin up Postgres
+brew install postgresql@15
+brew services start postgresql@15
+createuser --interactive --pwprompt   # e.g. user: judicial, pw: ********
+createdb -O judicial case_details
 
 # 4. Load parquet into Postgres
-python -m src.cli ingest
+python -m src.data.ingest_sql
 
-# 5. Explore
-streamlit run dashboard/app.py            # optional
+# 5. Launch the dashboard
+export PYTHONPATH=$PYTHONPATH:$(pwd)
+streamlit run dashboard/app.py
 ```
 
 ## Environment Variables
 
 Copy `.env.example` → `.env` and fill in as needed.
 
-|      Var       |                             Default                                   | Purpose                                               |
-|----------------|-----------------------------------------------------------------------|-------------------------------------------------------|
-| `CL_API_KEY`   | _empty_                                                               | (Optional) CourtListener API key – higher rate limits |
-| `DATABASE_URL` | `postgresql+psycopg2://postgres:postgres@localhost:5432/case_details` | SQLAlchemy URL used by the pipeline                   |
-
-## Docker
-
-> Great for demos / CI runs
-
-```
-make up          # builds image, launches Postgres, runs full ETL
-make down        # stop + remove containers/volumes
-```
+|      Var       |                             Default                                           | Purpose                                    |
+|----------------|-------------------------------------------------------------------------------|--------------------------------------------|
+| `CL_API_KEY`   | <copied from CourtListner's Developer Tools page>                             | CourtListener API key – higher rate limits |
+| `DATABASE_URL` | `postgresql+psycopg2://judicial:<password>@localhost:5432/judicial_analytics` | SQLAlchemy URL used by the pipeline        |
 
 ---
 
@@ -84,7 +83,7 @@ make down        # stop + remove containers/volumes
   Remove stale parquet files before re-running the transform step:  
   `rm -f data/processed/*.parquet`
 
-- **Skip empty parquet files**  
+- **Skip empty parquet files**
   `ingest_sql.py` already ignores zero-row files, but you can verify with  
   `python - <<'PY'  
   import glob, pandas as pd, pathlib, sys  
@@ -92,12 +91,11 @@ make down        # stop + remove containers/volumes
       if pd.read_parquet(p).empty: print("EMPTY →", p)  
   PY`
 
-- **Quick ETL smoke test**  
-  ```bash
-  make db           # spin up Postgres only
-  python -m src.cli transform
-  python -m src.cli ingest
-  ```
+- **Delete old tables**
+  Remove data sitting in Postgres before re-running the ingest step: 
+  `psql -U <user> -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'judicial_analytics';" # stop any sessions that might be connected first`
+  `dropdb -U <user> judicial_analytics       # drop the DB`
+  `createdb -U <user> judicial_analytics     # create a fresh, empty DB (same owner)`
 
 ---
 
@@ -114,10 +112,10 @@ produced by this pipeline, please reference CourtListener and retain the CC0 not
 
 ## Roadmap
 
-| Status |                       Goal                  |                                       Notes                              |
-|--------|---------------------------------------------|--------------------------------------------------------------------------|
-| ✅     | **Stable ETL** (fetch → transform → ingest) | Handles full date range for all 94 districts.                            |
-| ⏳     | **Judge analytics**                         | Scrape judge IDs → enrich cases → activate `judge_win_rates` view.       |
-| ⏳     | **Weekly GitHub Action**                    | Cloud run that pulls the past 7 days of dockets & outcomes every Monday. |
+| Status |                       Goal                  |                                       Notes                               |
+|--------|---------------------------------------------|---------------------------------------------------------------------------|
+| ✅     | **Stable ETL** (fetch → transform → ingest) | Handles full date range for all 94 districts.                             |
+| ✅     | **Interactive Dashboard**                   | Displays filing frequencies and trends across geographies and NOS codes.  |
+| ⏳     | **Weekly GitHub Action**                    | Pulls the past 7 days of dockets & outcomes every Monday.                 |
 
 Legend: ✅ done  ⏳ planned
