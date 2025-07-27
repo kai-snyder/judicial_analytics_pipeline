@@ -6,7 +6,7 @@ PostgreSQL, and serves a Streamlit dashboard.
 
 |       Stage      |                  Script / Tool                  |                          What it does                         |
 |------------------|-------------------------------------------------|---------------------------------------------------------------|
-| **1. Fetch**     | `fetch_fd_slugs.sh`, `fetch_year_all_courts.sh` | Pull raw JSONL dockets + outcomes from CourtListener REST API |
+| **1. Fetch**     | `fetch_fd_slugs.sh`, `fetch_year_all_courts.sh` | Pull raw JSONL dockets from CourtListener REST API            |
 | **2. Transform** | `python -m src.data.transform`                  | Normalize JSONL → parquet (`data/processed/…`)                |
 | **3. Ingest**    | `python -m src.cli ingest`                      | Create schema, load parquet into Postgres                     |
 | **4. Explore**   | `streamlit run dashboard/app.py`                | Interactive dashboard                                         |
@@ -43,7 +43,7 @@ python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt 
 cp .env.example .env           # add your CL_API_TOKEN 
 
-# 1. Fetch a year of dockets + outcomes
+# 1. Fetch a year of dockets
 src/data/fetch_year_all_courts.sh     # in the file, change START and END as needed
 
 # 2. Transform JSONL → parquet
@@ -101,8 +101,8 @@ Copy `.env.example` → `.env` and fill in as needed.
 
 ## Dataset/API License
 
-All docket and outcome data are fetched from **CourtListener**  
-(CC0 1.0 Universal Public Domain Dedication).  
+All docket data is fetched from **CourtListener**
+(CC0 1.0 Universal Public Domain Dedication).
 See <https://www.courtlistener.com/api/bulk-info/> for details.
 
 *When you redistribute any portion of the raw JSONL or processed parquet
@@ -116,6 +116,6 @@ produced by this pipeline, please reference CourtListener and retain the CC0 not
 |--------|---------------------------------------------|---------------------------------------------------------------------------|
 | ✅     | **Stable ETL** (fetch → transform → ingest) | Handles full date range for all 94 districts.                             |
 | ✅     | **Interactive Dashboard**                   | Displays filing frequencies and trends by geography and NOS codes.        |
-| ⏳     | **Weekly GitHub Action**                    | Pulls the past 7 days of dockets & outcomes every Monday.                 |
+| ⏳     | **Weekly GitHub Action**                    | Pulls the past 7 days of dockets every Monday.                            |
 
 Legend: ✅ done  ⏳ planned
