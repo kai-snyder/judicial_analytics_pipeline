@@ -31,7 +31,7 @@ PostgreSQL, and serves a Streamlit dashboard.
 
 ## Quick Peek
 
-![Interactive dashboard showcase](dashboard_demonstration.gif)
+![Interactive dashboard showcase](dashboard_showcase.gif)
 
 ## Quick Start
 
