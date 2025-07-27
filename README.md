@@ -8,7 +8,7 @@ PostgreSQL, and serves a Streamlit dashboard.
 |------------------|-------------------------------------------------|---------------------------------------------------------------|
 | **1. Fetch**     | `fetch_fd_slugs.sh`, `fetch_year_all_courts.sh` | Pull raw JSONL dockets from CourtListener REST API            |
 | **2. Transform** | `python -m src.data.transform`                  | Normalize JSONL → parquet (`data/processed/…`)                |
-| **3. Ingest**    | `python -m src.cli ingest`                      | Create schema, load parquet into Postgres                     |
+| **3. Ingest**    | `python -m src.data.ingest_sql`                 | Create schema, load parquet into Postgres                     |
 | **4. Explore**   | `streamlit run dashboard/app.py`                | Interactive dashboard                                         |
 
 ---
@@ -29,7 +29,7 @@ PostgreSQL, and serves a Streamlit dashboard.
 
 ---
 
-## Quick Peek
+## Sneak Peek
 
 ![Interactive dashboard showcase](dashboard_showcase.gif)
 
