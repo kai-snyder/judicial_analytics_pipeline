@@ -115,7 +115,7 @@ produced by this pipeline, please reference CourtListener and retain the CC0 not
 | Status |                       Goal                  |                                       Notes                               |
 |--------|---------------------------------------------|---------------------------------------------------------------------------|
 | ✅     | **Stable ETL** (fetch → transform → ingest) | Handles full date range for all 94 districts.                             |
-| ✅     | **Interactive Dashboard**                   | Displays filing frequencies and trends across geographies and NOS codes.  |
+| ✅     | **Interactive Dashboard**                   | Displays filing frequencies and trends by geography and NOS codes.        |
 | ⏳     | **Weekly GitHub Action**                    | Pulls the past 7 days of dockets & outcomes every Monday.                 |
 
 Legend: ✅ done  ⏳ planned
