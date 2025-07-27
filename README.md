@@ -29,7 +29,7 @@ PostgreSQL, and serves a Streamlit dashboard.
 
 ---
 
-## Quick peek
+## Quick Peek
 
 ![Interactive dashboard showcase](dashboard_demonstration.gif)
 
