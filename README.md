@@ -69,7 +69,7 @@ Copy `.env.example` → `.env` and fill in as needed.
 
 |      Var       |                             Default                                           | Purpose                                    |
 |----------------|-------------------------------------------------------------------------------|--------------------------------------------|
-| `CL_API_KEY`   | `<copied from CourtListner's Developer Tools page>`                           | CourtListener API key – higher rate limits |
+| `CL_API_KEY`   | `<copied from CourtListener's Developer Tools page>`                           | CourtListener API key – higher rate limits |
 | `DATABASE_URL` | `postgresql+psycopg2://judicial:<password>@localhost:5432/judicial_analytics` | SQLAlchemy URL used by the pipeline        |
 
 ---
