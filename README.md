@@ -17,7 +17,7 @@ PostgreSQL, and serves a Streamlit dashboard.
 
 ```
 ├─ config/ # logging + settings templates
-├─ data/ # <- ignored in Git
+├─ data/
 │ ├─ raw/ # raw JSONL from CourtListener
 │ └─ processed/ # tidy parquet
 ├─ sql/ # schema.sql (DDL)
