@@ -37,11 +37,8 @@ site/
 .env.*                    # any env variants the user may create
 
 # Data outputs
-data/raw/
-data/interim/
-data/processed/
-data/features/
-reports/
+data/raw/dockets_*.jsonl
+data/processed/dockets_*.parquet
 models/artifacts/
 
 # Notebooks checkpoints / output
