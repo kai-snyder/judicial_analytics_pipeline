@@ -70,7 +70,7 @@ Copy `.env.example` → `.env` and fill in as needed.
 |      Var       |                             Default                                           | Purpose                                    |
 |----------------|-------------------------------------------------------------------------------|--------------------------------------------|
 | `CL_API_KEY`   | `<copied from CourtListener's Developer Tools page>`                           | CourtListener API key – higher rate limits |
-| `DATABASE_URL` | `postgresql+psycopg2://judicial:<password>@localhost:5432/judicial_analytics` | SQLAlchemy URL used by the pipeline        |
+| `DATABASE_URL` | `postgresql+psycopg2://judicial:<password>@localhost:5432/case_details` | SQLAlchemy URL used by the pipeline        |
 
 ---
 
@@ -94,9 +94,9 @@ Copy `.env.example` → `.env` and fill in as needed.
 
 - **Delete old tables**  
   Remove data sitting in Postgres before re-running the ingest step:  
-  `psql -U <user> -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'judicial_analytics';" # stop any sessions that might be connected first`  
-  `dropdb -U <user> judicial_analytics       # drop the DB`  
-  `createdb -U <user> judicial_analytics     # create a fresh, empty DB (same owner)`
+  `psql -U <user> -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'case_details';" # stop any sessions that might be connected first`  
+  `dropdb -U <user> case_details       # drop the DB`  
+  `createdb -U <user> case_details     # create a fresh, empty DB (same owner)`
 
 ---
 
