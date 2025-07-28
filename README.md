@@ -83,18 +83,19 @@ Copy `.env.example` → `.env` and fill in as needed.
   Remove stale parquet files before re-running the transform step:  
   `rm -f data/processed/*.parquet`
 
-- **Skip empty parquet files**
-  `ingest_sql.py` already ignores zero-row files, but you can verify with  
-  `python - <<'PY'  
-  import glob, pandas as pd, pathlib, sys  
-  for p in pathlib.Path("data/processed").glob("*.parquet"):  
-      if pd.read_parquet(p).empty: print("EMPTY →", p)  
-  PY`
+- **Skip empty parquet files**  
+  `ingest_sql.py` already ignores zero-row files, but you can verify with:  
+  `python - <<'PY'`  
+  `import glob, pandas as pd, pathlib, sys`  
+  `for p in pathlib.Path("data/processed").glob("*.parquet"):`  
+  `    if pd.read_parquet(p).empty:`  
+  `        print("EMPTY →", p)`  
+  `PY`
 
-- **Delete old tables**
-  Remove data sitting in Postgres before re-running the ingest step: 
-  `psql -U <user> -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'judicial_analytics';" # stop any sessions that might be connected first`
-  `dropdb -U <user> judicial_analytics       # drop the DB`
+- **Delete old tables**  
+  Remove data sitting in Postgres before re-running the ingest step:  
+  `psql -U <user> -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'judicial_analytics';" # stop any sessions that might be connected first`  
+  `dropdb -U <user> judicial_analytics       # drop the DB`  
   `createdb -U <user> judicial_analytics     # create a fresh, empty DB (same owner)`
 
 ---
