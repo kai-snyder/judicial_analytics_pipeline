@@ -4,12 +4,12 @@ A reproducible data pipeline that fetches CourtListener
 district court dockets, transforms them into tidy parquet files, loads them into
 PostgreSQL, and serves a Streamlit dashboard.
 
-|       Stage      |                  Script / Tool                  |                          What it does                         |
-|------------------|-------------------------------------------------|---------------------------------------------------------------|
-| **1. Fetch**     | `fetch_fd_slugs.sh`, `fetch_year_all_courts.sh` | Pull raw JSONL dockets from CourtListener REST API            |
-| **2. Transform** | `python -m src.data.transform`                  | Normalize JSONL → parquet (`data/processed/…`)                |
-| **3. Ingest**    | `python -m src.data.ingest_sql`                 | Create schema, load parquet into Postgres                     |
-| **4. Explore**   | `streamlit run dashboard/app.py`                | Interactive dashboard                                         |
+|       Stage      |                  Script / Tool                  |                          What it does                             |
+|------------------|-------------------------------------------------|-------------------------------------------------------------------|
+| **1. Fetch**     | `fetch_fd_slugs.sh`, `fetch_year_all_courts.sh` | Pull raw JSONL dockets from CourtListener REST API (`data/raw/…`) |
+| **2. Transform** | `python -m src.data.transform`                  | Normalize JSONL → parquet (`data/processed/…`)                    |
+| **3. Ingest**    | `python -m src.data.ingest_sql`                 | Create schema, load parquet into Postgres                         |
+| **4. Explore**   | `streamlit run dashboard/app.py`                | Kickstart interactive dashboard                                   |
 
 ---
 
