@@ -31,7 +31,7 @@ Finally, two selectors control how the violins are ordered. One lets you pick th
 
 In sum, the sidebar settings cascade through every query so that volume, geography, topical mix, temporal trends, and case closing speed stay in perfect sync as you explore.
 
-**Disclaimer: Please note to not select "Top 5 (by count)" for both district court and NOS code multiselects as the data fails to load properly.**
+***Disclaimer: Please note to not select "Top 5 (by count)" for both district court and NOS code multiselects as the data fails to load properly.***
 
 ---
 
