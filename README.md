@@ -11,24 +11,6 @@ PostgreSQL, and serves a Streamlit dashboard.
 | **3. Ingest**    | `python -m src.data.ingest_sql`                 | Create schema, load parquet into Postgres                         |
 | **4. Explore**   | `streamlit run dashboard/app.py`                | Kickstart interactive dashboard                                   |
 
----
-
-## Folder Layout
-
-```
-├─ config/ # logging + settings templates
-├─ data/
-│ ├─ raw/ # raw JSONL from CourtListener
-│ └─ processed/ # tidy parquet
-├─ sql/ # schema.sql (DDL)
-├─ src/ # Python package
-│ ├─ data/ # fetch / transform / ingest helpers
-│ └─ utils/ # small shared helpers
-└─ dashboard/ # Streamlit app
-```
-
----
-
 ## Sneak Peek
 
 ![Interactive dashboard showcase](sneak_peek.gif)
@@ -46,6 +28,24 @@ Below the core filters is a radio button that switches the violins’ x-axis bet
 Finally, two selectors control how the violins are ordered. One lets you pick the statistic (mean, median, first quartile, third quartile, minimum or maximum) used to rank the groups, while the other flips the sort direction. Each adjustment recomputes the ordering before Plotly redraws the chart.
 
 In sum, the sidebar settings cascade through every query so that volume, geography, topical mix, temporal trends and case-closing speed stay in perfect sync as you explore.
+
+---
+
+## Folder Layout
+
+```
+├─ config/ # logging + settings templates
+├─ data/
+│ ├─ raw/ # raw JSONL from CourtListener
+│ └─ processed/ # tidy parquet
+├─ sql/ # schema.sql (DDL)
+├─ src/ # Python package
+│ ├─ data/ # fetch / transform / ingest helpers
+│ └─ utils/ # small shared helpers
+└─ dashboard/ # Streamlit app
+```
+
+---
 
 ## Quick Start
 
