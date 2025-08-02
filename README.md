@@ -19,7 +19,7 @@ PostgreSQL, and serves a Streamlit dashboard.
 
 The dashboard opens with a date range picker at the top of the sidebar. Selecting new start and end dates triggers fresh queries against Postgres, so every element on the screen (KPIs, map, treemap, line charts, and violin plots) immediately recalculates to reflect only cases filed inside that window.
 
-Beneath the calendar you choose a time bucket granularity (daily, weekly, monthly, or yearly). The two time series charts (filings by district court and filings by NOS code) re-aggregate on the fly by changing the SQL `date_trunc` interval, letting you zoom from long-term trends down to day-by-day spikes.
+Beneath the calendar you choose a time bucket granularity (daily, weekly, monthly, or yearly). The two time series charts (filings by district court and filings by NOS code) re-aggregate on the fly, letting you zoom from long-term trends down to day-by-day spikes.
 
 Next is the district court multiselect. Leaving it blank (or picking “All”) keeps the view national and collapses the district line chart to a single composite series. Choosing “Top 5 (by count)” automatically finds the busiest five courts for the current date and NOS slice, while selecting any custom set plots one line per court and shades only those districts on the map. All downstream charts, including the treemap and latency violins, inherit the same court filter. Please note 
 
