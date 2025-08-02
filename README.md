@@ -11,6 +11,8 @@ PostgreSQL, and serves a Streamlit dashboard.
 | **3. Ingest**    | `python -m src.data.ingest_sql`                 | Create schema, load parquet into Postgres                         |
 | **4. Explore**   | `streamlit run dashboard/app.py`                | Kickstart interactive dashboard                                   |
 
+---
+
 ## Sneak Peek
 
 ![Interactive dashboard showcase](sneak_peek.gif)
@@ -44,8 +46,6 @@ In sum, the sidebar settings cascade through every query so that volume, geograp
 │ └─ utils/ # small shared helpers
 └─ dashboard/ # Streamlit app
 ```
-
----
 
 ## Quick Start
 
