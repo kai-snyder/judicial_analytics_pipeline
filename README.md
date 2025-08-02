@@ -17,7 +17,7 @@ PostgreSQL, and serves a Streamlit dashboard.
 
 ![Interactive dashboard showcase](sneak_peek.gif)
 
-The dashboard opens with a date-range picker at the top of the sidebar. Selecting new start and end dates triggers fresh queries against Postgres, so every element on the screen (KPIs, map, line charts, treemap and violins) immediately recalculates to reflect only cases filed inside that window.
+The dashboard opens with a date-range picker at the top of the sidebar. Selecting new start and end dates triggers fresh queries against Postgres, so every element on the screen (KPIs, map, treemap, line charts, and violins) immediately recalculates to reflect only cases filed inside that window.
 
 Beneath the calendar you choose a time-bucket granularity (daily, weekly, monthly or yearly). The two time-series charts (filings by district court and filings by NOS code) re-aggregate on the fly by changing the SQL `date_trunc` interval, letting you zoom from long-term trends down to day-by-day spikes.
 
