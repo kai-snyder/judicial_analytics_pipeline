@@ -19,19 +19,19 @@ PostgreSQL, and serves a Streamlit dashboard.
 
 The dashboard opens with a date range picker at the top of the sidebar. Selecting new start and end dates triggers fresh queries against Postgres, so every element on the screen (KPIs, map, treemap, line charts, and violin plots) immediately recalculates to reflect only cases filed inside that window.
 
-Beneath the calendar you choose a time bucket granularity (daily, weekly, monthly or yearly). The two time series charts (filings by district court and filings by NOS code) re-aggregate on the fly by changing the SQL `date_trunc` interval, letting you zoom from long-term trends down to day-by-day spikes.
+Beneath the calendar you choose a time bucket granularity (daily, weekly, monthly, or yearly). The two time series charts (filings by district court and filings by NOS code) re-aggregate on the fly by changing the SQL `date_trunc` interval, letting you zoom from long-term trends down to day-by-day spikes.
 
 Next is the district court multiselect. Leaving it blank (or picking “All”) keeps the view national and collapses the district line chart to a single composite series. Choosing “Top 5 (by count)” automatically finds the busiest five courts for the current date and NOS slice, while selecting any custom set plots one line per court and shades only those districts on the map. All downstream charts, including the treemap and latency violins, inherit the same court filter. Please note 
 
 The NOS code multiselect works in parallel. You can leave it blank to include every Nature of Suit, restrict the view to the five most common codes within the current court slice, or focus on any specific set. Changing this list updates KPI counts, trims the treemap to the chosen leaves, filters the NOS line chart, and narrows the data feeding the latency violins. 
 
-**Please note to not select "Top 5 (by count)" for both district court and NOS code multiselects as the data fails to load properly.**
+Please note to not select "Top 5 (by count)" for both district court and NOS code multiselects as the data fails to load properly.
 
 Below the core filters is a radio button that switches the violins’ x-axis between district courts and NOS codes. This lets you study closing time distributions by geography or by legal topic without touching the other charts.
 
-Finally, two selectors control how the violins are ordered. One lets you pick the statistic (mean, median, first quartile, third quartile, minimum or maximum) used to rank the groups, while the other flips the sort direction. Each adjustment recomputes the ordering before Plotly redraws the chart.
+Finally, two selectors control how the violins are ordered. One lets you pick the statistic (mean, median, first quartile, third quartile, minimum, or maximum) used to rank the groups, while the other flips the sort direction. Each adjustment recomputes the ordering before Plotly redraws the chart.
 
-In sum, the sidebar settings cascade through every query so that volume, geography, topical mix, temporal trends and case closing speed stay in perfect sync as you explore.
+In sum, the sidebar settings cascade through every query so that volume, geography, topical mix, temporal trends, and case closing speed stay in perfect sync as you explore.
 
 ---
 
