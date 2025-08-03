@@ -26,9 +26,6 @@ start_dt, end_dt = st.sidebar.date_input(
     max_value=max_dt,
 )
 
-agg = st.sidebar.selectbox("Time Bucket",
-                           ["Daily", "Weekly", "Monthly", "Yearly"], index=0)
-
 courts_all = sorted(
     pd.read_sql("SELECT DISTINCT court_slug FROM cases ORDER BY 1", da.ENG)
       .court_slug.tolist()
@@ -64,6 +61,9 @@ elif "Top 5 (by count)" in nos_raw:
 else:
     nos_codes      = [int(x) for x in nos_raw]
     show_nos_chart = bool(nos_codes)
+
+agg = st.sidebar.selectbox("Time Bucket",
+                           ["Daily", "Weekly", "Monthly", "Yearly"], index=0)
 
 group_option = st.sidebar.radio(
     "Violin Group",
